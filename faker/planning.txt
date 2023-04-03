@@ -1,0 +1,20 @@
+Application Log
+    Date: 2023-03-28
+    Time: 09:47:33
+    Application: Sales System
+    Event Type: Error
+    Event Description: User login failed
+    Username: jsmith
+    IP Address: 192.168.2.5
+    Error Message: Incorrect password
+
+Firewall Log
+    Date: 2023-03-28
+    Time: 14:03:25
+    Source IP: 192.168.1.10
+    Destination IP: 54.239.17.6
+    Protocol: TCP
+    Source Port: 3128
+    Destination Port: 80
+    Action: Allowed
+    Rule: HTTP_OUT
