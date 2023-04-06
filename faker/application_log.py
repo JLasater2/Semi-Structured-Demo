@@ -9,7 +9,7 @@ fake = Faker()
 app_logs = []
 
 # Set the number of logs to generate
-num_logs = 10
+num_logs = 1000
 
 # Loop through the number of logs to generate
 for i in range(num_logs):
@@ -41,5 +41,6 @@ for i in range(num_logs):
     app_logs.append(app_log)
 
 # Write the list of application logs to a JSON file
-with open('app_logs.json', 'w') as file:
+with open('faker/output/application_log.json', 'w') as file:
     json.dump(app_logs, file, indent=4)
+
