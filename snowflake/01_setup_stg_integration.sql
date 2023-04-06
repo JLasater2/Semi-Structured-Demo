@@ -10,3 +10,8 @@ create or replace storage integration s3_integration
 ;
 
 desc integration s3_integration;
+
+-- Confirm storage integration has been created
+show storage integrations;
+
+desc integration s3_integration;
