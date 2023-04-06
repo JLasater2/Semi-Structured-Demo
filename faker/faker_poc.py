@@ -22,20 +22,26 @@ for i in range(num_records):
                 "state": fake.state_abbr(),
                 "zip": fake.zipcode()
             },
-            "phone_numbers": [
-                {
-                    "type": "home",
-                    "number": fake.phone_number()
-                },
-                {
-                    "type": "work",
-                    "number": fake.phone_number()
-                }
-            ]
+            "phone_numbers": []
         }
     }
+    
+    # Add a home phone number with a 50% probability
+    if fake.boolean(chance_of_getting_true=50):
+        record["person"]["phone_numbers"].append({
+            "type": "home",
+            "number": fake.phone_number()
+        })
+    
+    # Add a work phone number with a 30% probability
+    if fake.boolean(chance_of_getting_true=30):
+        record["person"]["phone_numbers"].append({
+            "type": "work",
+            "number": fake.phone_number()
+        })
+        
     records.append(record)
 
 # Export the records to a JSON file
-with open('fake_nested_data.json', 'w') as f:
+with open('faker/output/fake_nested_data.json', 'w') as f:
     json.dump(records, f, indent=4)
