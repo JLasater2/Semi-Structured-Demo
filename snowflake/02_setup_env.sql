@@ -24,7 +24,7 @@ create or replace stage semi_structured_demo.stg.S3_STAGE
     storage_integration = S3_INTEGRATION
     comment = 'External s3 stage for importing semi-structured data'
     directory = (enable = true)
-    file_format = (TYPE = JSON)
+    file_format = (TYPE = JSON strip_outer_array = true)
     ;
 
 -- Show stage properties
