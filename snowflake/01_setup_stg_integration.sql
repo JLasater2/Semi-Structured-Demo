@@ -13,5 +13,7 @@ desc integration s3_integration;
 
 -- Confirm storage integration has been created
 show storage integrations;
-
 desc integration s3_integration;
+
+use role securityadmin;
+grant usage on integration s3_integration to role semi_structured_demo;
