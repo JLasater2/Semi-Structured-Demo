@@ -1,4 +1,4 @@
-use role semi_structured_demo;
+use role semi_strsysauctured_demo;
 drop database if exists semi_structured_demo;
 
 use role accountadmin;
