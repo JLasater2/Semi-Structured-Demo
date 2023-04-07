@@ -16,14 +16,16 @@ for i in range(num_logs):
     # Generate a random event type
     event_type = random.choice(['Info', 'Warning', 'Error'])
 
+    if event_type == 'Error':
+        error_message = "Login failed"
+    else:
+        error_message = ''
+
     # Generate a random username
     username = fake.user_name()
 
     # Generate a random IP address
     ip_address = fake.ipv4()
-
-    # Generate a random error message
-    error_message = fake.sentence()
 
     # Create a dictionary to represent the application log
     app_log = {

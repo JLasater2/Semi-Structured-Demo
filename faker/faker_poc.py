@@ -27,7 +27,7 @@ for i in range(num_records):
     }
     
     # Add a home phone number with a 50% probability
-    if fake.boolean(chance_of_getting_true=50):
+    if fake.boolean(chance_of_getting_true=30):
         record["person"]["phone_numbers"].append({
             "type": "home",
             "number": fake.phone_number()

@@ -26,5 +26,9 @@ LOCAL_FILE_PATH = 'faker/output/firewall_log.json'
 S3_OBJECT_KEY = 'snowflake/import/firewall_log.json'
 s3.upload_file(LOCAL_FILE_PATH, BUCKET_NAME, S3_OBJECT_KEY)
 
+# Set the local file path and S3 object key
+LOCAL_FILE_PATH = 'faker/output/fake_nested_data.json'
+S3_OBJECT_KEY = 'snowflake/import/fake_nested_data.json'
+s3.upload_file(LOCAL_FILE_PATH, BUCKET_NAME, S3_OBJECT_KEY)
 
 print('File uploaded successfully!')

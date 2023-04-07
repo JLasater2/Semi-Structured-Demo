@@ -6,15 +6,26 @@ use schema semi_structured_demo.stg;
 select $1
 from @s3_stage/import/application_log.json;
 
--- View all of the keys in the JSON
+-- View all of the unique paths in the JSON
+select 
+    REGEXP_REPLACE(y.path, '\\[[0-9]+\\]', '[]') AS "Path"
+    , count(1) as cnt
+   -- y.*
+from (
+    select $1 as var_data
+    from @s3_stage/import/application_log.json
+)x ,
+lateral FLATTEN(var_data, recursive=>true) y
+group by 1
+;
 
 select 
     REGEXP_REPLACE(y.path, '\\[[0-9]+\\]', '[]') AS "Path"
     , count(1) as cnt
    -- y.*
 from (
-    select TO_VARIANT($1) as var_data
-    from @s3_stage/import/application_log.json
+    select $1 as var_data
+    from @s3_stage/import/fake_nested_data.json
 )x ,
 lateral FLATTEN(var_data, recursive=>true) y
 group by 1
