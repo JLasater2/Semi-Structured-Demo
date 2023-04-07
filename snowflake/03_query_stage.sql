@@ -29,3 +29,4 @@ from (
 )x ,
 lateral FLATTEN(var_data, recursive=>true) y
 group by 1
+;
