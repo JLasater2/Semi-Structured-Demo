@@ -21,13 +21,14 @@ for i in range(num_records):
                 "city": fake.city(),
                 "state": fake.state_abbr(),
                 "zip": fake.zipcode()
-            },
-            "phone_numbers": []
+            }
         }
     }
     
     # Add a home phone number with a 50% probability
-    if fake.boolean(chance_of_getting_true=30):
+    if fake.boolean(chance_of_getting_true=30): 
+        if "phone_numbers" not in record["person"]:
+            record["person"]["phone_numbers"] = []
         record["person"]["phone_numbers"].append({
             "type": "home",
             "number": fake.phone_number()
@@ -35,6 +36,8 @@ for i in range(num_records):
     
     # Add a work phone number with a 30% probability
     if fake.boolean(chance_of_getting_true=30):
+        if "phone_numbers" not in record["person"]:
+            record["person"]["phone_numbers"] = []
         record["person"]["phone_numbers"].append({
             "type": "work",
             "number": fake.phone_number()
