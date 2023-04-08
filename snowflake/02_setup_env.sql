@@ -26,16 +26,16 @@ create or replace stage semi_structured_demo.stg.s3_stage_json
     directory = (enable = true)
     file_format = (type = json strip_outer_array = true file_extension = '.json')
     ;
-    
-create or replace stage semi_structured_demo.stg.s3_stage_parquet
+
+create or replace stage semi_structured_demo.stg.s3_stage_xml
     url = 's3://sf-bucket-290/snowflake/'
     storage_integration = s3_integration
     comment = 'external s3 stage for importing semi-structured data'
     directory = (enable = true)
-    file_format = (type = parquet)
+    file_format = (type = xml)
     ;
 
 -- show stage properties
-desc stage stg.s3_stage;
+desc stage stg.s3_stage_json;
 -- list files available in the stage
-list @s3_stage/import/;
+list @s3_stage_json/import/;
