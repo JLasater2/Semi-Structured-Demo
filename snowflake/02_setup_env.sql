@@ -1,33 +1,33 @@
--- Configure roles/user
+-- configure roles/user
 use role useradmin;
 create or replace role semi_structured_demo;
-GRANT ROLE SEMI_STRUCTURED_DEMO TO ROLE SYSADMIN;
+grant role semi_structured_demo to role sysadmin;
 grant role semi_structured_demo to user johnlasater2;
 
--- Setup 
-USE ROLE ACCOUNTADMIN;
+-- setup 
+use role accountadmin;
 grant usage on integration s3_integration to role semi_structured_demo; 
 
-USE ROLE SYSADMIN;
-CREATE OR REPLACE DATABASE SEMI_STRUCTURED_DEMO;
-GRANT ALL ON DATABASE SEMI_STRUCTURED_DEMO TO ROLE SEMI_STRUCTURED_DEMO;
-GRANT USAGE ON WAREHOUSE COMPUTE_WH TO ROLE SEMI_STRUCTURED_DEMO;
+use role sysadmin;
+create or replace database semi_structured_demo;
+grant all on database semi_structured_demo to role semi_structured_demo;
+grant usage on warehouse compute_wh to role semi_structured_demo;
 
-USE ROLE SEMI_STRUCTURED_DEMO;
-CREATE OR REPLACE SCHEMA SEMI_STRUCTURED_DEMO.STG;
+use role semi_structured_demo;
+create or replace schema semi_structured_demo.stg;
 
--- Setup stage
--- Create external stage
+-- setup stage
+-- create external stage
 
-create or replace stage semi_structured_demo.stg.S3_STAGE 
+create or replace stage semi_structured_demo.stg.s3_stage 
     url = 's3://sf-bucket-290/snowflake/'
-    storage_integration = S3_INTEGRATION
-    comment = 'External s3 stage for importing semi-structured data'
+    storage_integration = s3_integration
+    comment = 'external s3 stage for importing semi-structured data'
     directory = (enable = true)
-    file_format = (TYPE = JSON strip_outer_array = true)
+    file_format = (type = json strip_outer_array = true)
     ;
 
--- Show stage properties
+-- show stage properties
 desc stage stg.s3_stage;
--- List files available in the stage
+-- list files available in the stage
 list @s3_stage/import/;
