@@ -1,5 +1,6 @@
 import boto3
 import csv
+import os
 
 with open('..\Common\s_python_s3_poc_accessKeys.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
@@ -14,21 +15,20 @@ BUCKET_NAME = 'sf-bucket-290'
 # Create an S3 client
 s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
 
-# Upload the file to S3
+# Set the local directory path and S3 object prefix
+LOCAL_DIR_PATH = 'faker/output/'
+S3_OBJECT_PREFIX = 'snowflake/import/'
 
-# Set the local file path and S3 object key
-LOCAL_FILE_PATH = 'faker/output/application_log.json'
-S3_OBJECT_KEY = 'snowflake/import/application_log.json'
-s3.upload_file(LOCAL_FILE_PATH, BUCKET_NAME, S3_OBJECT_KEY)
+# Get a list of all the files in the local directory
+file_list = os.listdir(LOCAL_DIR_PATH)
 
-# Set the local file path and S3 object key
-LOCAL_FILE_PATH = 'faker/output/firewall_log.json'
-S3_OBJECT_KEY = 'snowflake/import/firewall_log.json'
-s3.upload_file(LOCAL_FILE_PATH, BUCKET_NAME, S3_OBJECT_KEY)
+# Loop through the list of files and upload each file to S3
+for file_name in file_list:
+    # Set the local file path and S3 object key
+    local_file_path = os.path.join(LOCAL_DIR_PATH, file_name)
+    s3_object_key = os.path.join(S3_OBJECT_PREFIX, file_name)
 
-# Set the local file path and S3 object key
-LOCAL_FILE_PATH = 'faker/output/fake_nested_data.json'
-S3_OBJECT_KEY = 'snowflake/import/fake_nested_data.json'
-s3.upload_file(LOCAL_FILE_PATH, BUCKET_NAME, S3_OBJECT_KEY)
+    # Upload the file to S3
+    s3.upload_file(local_file_path, BUCKET_NAME, s3_object_key)
 
-print('File uploaded successfully!')
+print('Files uploaded successfully!')
