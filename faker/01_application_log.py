@@ -9,7 +9,7 @@ fake = Faker()
 app_logs = []
 
 # Set the number of logs to generate
-num_logs = 1000
+num_logs = 100
 
 # Loop through the number of logs to generate
 for i in range(num_logs):

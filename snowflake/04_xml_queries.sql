@@ -1,31 +1,12 @@
-use role semi_structured_demo;
-use warehouse compute_wh;
-use schema semi_structured_demo.stg;
-
--- see what the raw data looks like - json
-select $1
-from @s3_stage_json/import/application_log.json;
-
--- see what the raw data looks like - xml
-select $1
-from @s3_stage_xml/import/application_log.xml
-file_format=(type=xml);
-
-
-
 ------------------------------------------------------------
 -- xml
 ------------------------------------------------------------
 -- Have to cast as varchar for VS Code to work
--- xml
--- create or replace temporary table sample_xml(src variant);
-
--- copy into sample_xml
--- from @s3_stage_xml/import/application_log.xml
--- file_format = (type=xml /*strip_outer_element = true*/) on_error='continue' ;
--- ;
-
 -- raw xml data; no transformation
+-- Notice only one row is returned due there only being one 
+--     occurance of the outermost tag, <application_logs>
+
+-- See what the raw data looks like 
 select 
     $1::varchar
 from  @s3_stage_xml/import/application_log.xml
@@ -36,7 +17,7 @@ from  @s3_stage_xml/import/application_log.xml
 select 
     log.value :: varchar as raw_data  
  from @s3_stage_xml/import/application_log.xml
-    , lateral flatten($1:"$") log 
+    , lateral flatten($1:"$", recursive=> true) log 
 ;
 
 -- Flatten the log record to give each log attribue on its own row
@@ -50,27 +31,27 @@ from @s3_stage_xml/import/application_log.xml
     , lateral flatten(log.value:"$") log_deets  -- unpivots the contents of the <log> tag
 ;
 
--- view all of the unique paths in the json
+-- Get a distinct list of tags and the # of occurances of each tag
 select 
-    regexp_replace(y.path, '\\[[0-9]+\\]', '[]') as "path"
-    , count(1) as cnt
-   -- y.*
-from (
-    select $1 as var_data
-    from @s3_stage/import/application_log.json
-)x ,
-lateral flatten(var_data, recursive=>true) y
-group by 1
+    count(1) 
+    , VALUE
+ from @s3_stage_xml/import/application_log.xml
+    , lateral flatten($1:"$", recursive=> true) log
+where log.key = '@'
+group by value
 ;
 
 select 
-    regexp_replace(y.path, '\\[[0-9]+\\]', '[]') as "path"
-    , count(1) as cnt
-   -- y.*
-from (
-    select $1 as var_data
-    from @s3_stage_json/import/fake_nested_data.json
-)x ,
-lateral flatten(var_data, recursive=>true) y
-group by 1
+    log.value :: varchar as raw_data 
+    , get(log.value, '@')  :: varchar as flattened_tag_name -- tag name
+    , get(log.value, '$')  :: varchar as flattened_tag_name -- tag name
+    , log.path :: varchar
+ from @s3_stage_xml/import/application_log.xml
+    , lateral flatten($1:"$", recursive=> true) log 
 ;
+
+
+
+
+
+
