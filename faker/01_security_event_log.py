@@ -18,7 +18,7 @@ with open('../Common/faker.csv', 'r') as csvfile:
     for row in csvreader:
         password = row[1]
 
-# Set up a connection to Snowflake
+# Set up a connection to Snowflake to read in IPs
 conn = snowflake.connector.connect(
     user='faker',
     password=password,
@@ -31,13 +31,14 @@ conn = snowflake.connector.connect(
 
 # Execute a SQL query to retrieve the Source IP column from your Snowflake table
 cursor = conn.cursor()
-cursor.execute('SELECT * FROM ipinfo_free_ip_geolocation_sample.demo.location')
+cursor.execute('SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location')
 rows = cursor.fetchall()
 
 # Loop through the number of logs to generate
 for i in range(num_logs):
     # Generate random IP addresses
-    source_ip = fake.ipv4()
+    #source_ip = fake.ipv4()
+    source_ip = random.choice(rows)[0]
     dest_ip = fake.ipv4()
 
     # Generate random port numbers
@@ -54,7 +55,7 @@ for i in range(num_logs):
     rule = fake.word()
 
     # Create a dictionary to represent the firewall log
-    firewall_log = {
+    security_event_log = {
         'Date': fake.date(),
         'Time': fake.time(),
         'Source IP': source_ip,
@@ -67,8 +68,8 @@ for i in range(num_logs):
     }
 
     # Append the firewall log dictionary to the list
-    firewall_logs.append(firewall_log)
+    firewall_logs.append(security_event_log)
 
 # Write the list of firewall logs to a JSON file
-with open('faker/output/firewall_log.json', 'w') as file:
-    json.dump(firewall_logs, file)
+with open('faker/output/security_event_log.json', 'w') as file:
+    json.dump(security_event_log, file)
