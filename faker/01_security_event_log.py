@@ -2,6 +2,7 @@ from faker import Faker
 import json
 import random
 import snowflake.connector
+import csv
 
 # Instantiate the Faker object
 fake = Faker()
@@ -12,14 +13,20 @@ firewall_logs = []
 # Set the number of logs to generate
 num_logs = 10
 
+with open('../Common/faker.csv', 'r') as csvfile:
+    csvreader = csv.reader(csvfile)
+    for row in csvreader:
+        password = row[1]
+
 # Set up a connection to Snowflake
 conn = snowflake.connector.connect(
     user='faker',
-    password='fakermaker#',
+    password=password,
     account='rr33146.us-east-2.aws',
     warehouse='compute_wh',
     database='ipinfo_free_ip_geolocation_sample',
-    schema='demo'
+    schema='demo',
+    role='faker_read_only'
 )
 
 # Execute a SQL query to retrieve the Source IP column from your Snowflake table
