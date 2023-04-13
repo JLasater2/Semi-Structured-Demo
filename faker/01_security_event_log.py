@@ -3,15 +3,20 @@ import json
 import random
 import snowflake.connector
 import csv
+import datetime
 
 # Instantiate the Faker object
 fake = Faker()
 
 # Create a list to store the firewall logs
-firewall_logs = []
+security_event_logs = []
 
 # Set the number of logs to generate
 num_logs = 10
+
+# Define the date range for the logs
+start_date = datetime.date(2023, 4, 1)
+end_date = datetime.date(2023, 4, 10)
 
 with open('../Common/faker.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
@@ -36,8 +41,10 @@ rows = cursor.fetchall()
 
 # Loop through the number of logs to generate
 for i in range(num_logs):
+    # Generate a random date between the start and end dates
+    date = fake.date_between_dates(date_start=start_date, date_end=end_date)
+    
     # Generate random IP addresses
-    #source_ip = fake.ipv4()
     source_ip = random.choice(rows)[0]
     dest_ip = fake.ipv4()
 
@@ -56,7 +63,7 @@ for i in range(num_logs):
 
     # Create a dictionary to represent the firewall log
     security_event_log = {
-        'Date': fake.date(),
+        'Date': date.strftime('%Y-%m-%d'),
         'Time': fake.time(),
         'Source IP': source_ip,
         'Destination IP': dest_ip,
@@ -68,8 +75,8 @@ for i in range(num_logs):
     }
 
     # Append the firewall log dictionary to the list
-    firewall_logs.append(security_event_log)
+    security_event_logs.append(security_event_log)
 
 # Write the list of firewall logs to a JSON file
 with open('faker/output/security_event_log.json', 'w') as file:
-    json.dump(security_event_log, file)
+    json.dump(security_event_logs, file, indent=4)
