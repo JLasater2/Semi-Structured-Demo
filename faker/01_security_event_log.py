@@ -1,3 +1,10 @@
+# 
+# This script generates security event log data containing
+# a source IP from a sample IP geolocation dataset in Snowflake.
+# This lookup allows for referential integrity between this data set
+# and the data to be joined to - IP geolocation data.
+#
+
 from faker import Faker
 import json
 import random
