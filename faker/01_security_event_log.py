@@ -65,9 +65,6 @@ for i in range(num_logs):
     # Generate random action
     action = random.choice(['Allowed', 'Blocked'])
 
-    # Generate a random rule name
-    rule = fake.word()
-
     # Create a dictionary to represent the firewall log
     security_event_log = {
         'Date': date.strftime('%Y-%m-%d'),
