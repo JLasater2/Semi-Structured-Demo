@@ -33,6 +33,11 @@ for i in range(num_logs):
 
     # Generate a random IP address
     ip_address = fake.ipv4()
+    
+    # Generate fake currency amount between two amounts
+    min_amount = 10000.50
+    max_amount = 999000.25
+    current_balance = round(fake.random.uniform(min_amount, max_amount), 2)
 
     # Create a dictionary to represent the application log
     app_log = {
@@ -42,8 +47,7 @@ for i in range(num_logs):
         'Event Type': event_type,
         'Event Description': event_description,
         'Username': username,
-        #'IP Address': ip_address,
-        #'Error Message': error_message
+        'Current Balance': current_balance
     }
 
     # Append the application log dictionary to the list
