@@ -4,6 +4,7 @@ use warehouse compute_wh;
 use schema semi_structured_demo.stg;
 
 -- See what the raw data looks like - json
+-- Note - 1 json object per row
 select $1
 from @s3_stage_json/import/application_log.json;
 
@@ -14,9 +15,9 @@ select
    -- y.*
 from (
     select $1 as var_data
-    from @s3_stage/import/application_log.json
+    from @s3_stage_json/import/application_log.json
 )x ,
-lateral flatten(var_data, recursive=>true outer=) y
+lateral flatten(var_data, recursive => true) y
 group by 1
 ;
 
