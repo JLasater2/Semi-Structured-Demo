@@ -79,7 +79,9 @@ for i in range(num_logs):
 
     # Add customer details if the event type is 'Account Maint'
     if event_type == 'Account Maint':
+        # Generate fake acct number
         app_log['Event Details'] = {}
+        app_log['Event Details']['Account Number'] = str(random.randint(100000000, 9999999999))
         app_log['Event Details']['Add authorized signor'] = 'TX-' + str(random.randint(100000000, 9999999999))
 
     # Append the application log dictionary to the list
