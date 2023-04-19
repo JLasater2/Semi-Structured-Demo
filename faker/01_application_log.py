@@ -65,6 +65,17 @@ for i in range(num_logs):
         current_balance = round(fake.random.uniform(min_amount, max_amount), 2)
         app_log['Event Details']['Current Balance'] = current_balance
 
+        # Add an array of the last 5 transactions
+        app_log['Event Details']['Recent Txns'] = []
+        for j in range(5):
+            transaction = {
+                'Date': str(fake.date_between_dates(date_start=start_date, date_end=end_date)),
+                'Type': random.choice(['POS Debit', 'Check Credit', 'ACH Debit', 'Check Deposit']),
+                'Amount': round(fake.random.uniform(10.00, 2000.00), 2)
+            }
+            app_log['Event Details']['Recent Txns'].append(transaction)
+
+
     # Add customer details if the event type is 'Cust Profile View'
     if event_type == 'Cust Profile View':
         app_log['Event Details'] = {}
