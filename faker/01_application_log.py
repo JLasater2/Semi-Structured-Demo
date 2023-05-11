@@ -15,8 +15,15 @@ end_date = datetime.date(2023, 4, 10)
 
 event_description = ''
 
+# Define a list of 30 distinct usernames
+usernames = []
+while len(usernames) < 32:
+    username = fake.user_name()
+    if username not in usernames:
+        usernames.append(username)
+
 # Set the number of logs to generate
-num_logs = 100
+num_logs = 10000
 
 # Loop through the number of logs to generate
 for i in range(num_logs):
@@ -36,7 +43,7 @@ for i in range(num_logs):
     event_type = random.choice(event_types)
 
     # Generate a random username
-    username = fake.user_name()
+    username = random.choice(usernames)
 
     # Generate a random IP address
     ip_address = fake.ipv4()
