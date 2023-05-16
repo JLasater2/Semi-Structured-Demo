@@ -15,7 +15,7 @@ end_date = datetime.date(2023, 4, 10)
 
 event_description = ''
 
-# Define a list of 30 distinct usernames
+# Define a list of distinct usernames
 usernames = []
 while len(usernames) < 32:
     username = fake.user_name()
@@ -28,25 +28,38 @@ num_logs = 10000
 # Loop through the number of logs to generate
 for i in range(num_logs):
 
-    # Define the choices for the event types and their corresponding probabilities
-    event_type_choices = [
-        ('Cust Profile Maint', 0.1),
-        ('Cust Profile View', 0.5),
-        ('Account Maint', 0.1),
-        ('Account View', 0.3)
-    ]
+    # For 30% of the records, use a specified user name 
+    # else for the other 70% generate a random user name
+    if random.random() < 0.3:
+        username = "JamesBond007"
+
+        # Define the choices for the event types and their corresponding probabilities
+        event_type_choices = [
+            ('Cust Profile Maint', 0.0),
+            ('Cust Profile View', 0.05),
+            ('Account Maint', 0.05),
+            ('Account View', 0.8)  #lots of account views
+        ]
+    else: 
+        username = random.choice(usernames)
+
+        # Define the choices for the event types and their corresponding probabilities
+        event_type_choices = [
+            ('Cust Profile Maint', 0.1),
+            ('Cust Profile View', 0.5),
+            ('Account Maint', 0.1),
+            ('Account View', 0.3)
+        ]
+
+    # Generate a random IP address
+    ip_address = fake.ipv4()
+
 
     # Create a weighted list of event types
     event_types = [c[0] for c in event_type_choices for i in range(int(c[1]*10))]
 
     # Randomly select an event type from the weighted list
     event_type = random.choice(event_types)
-
-    # Generate a random username
-    username = random.choice(usernames)
-
-    # Generate a random IP address
-    ip_address = fake.ipv4()
 
     # Create a dictionary to represent the application log
     app_log = {
