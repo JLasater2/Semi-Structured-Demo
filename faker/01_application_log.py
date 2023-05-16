@@ -40,6 +40,10 @@ for i in range(num_logs):
             ('Account Maint', 0.05),
             ('Account View', 0.8)  #lots of account views
         ]
+
+        # Generate fake currency amount between two amounts
+        min_amount = 100000.50
+        max_amount = 999000.25
     else: 
         username = random.choice(usernames)
 
@@ -50,6 +54,10 @@ for i in range(num_logs):
             ('Account Maint', 0.1),
             ('Account View', 0.3)
         ]
+
+        # Generate fake currency amount between two amounts
+        min_amount = 10000.50
+        max_amount = 999000.25
 
     # Generate a random IP address
     ip_address = fake.ipv4()
@@ -79,9 +87,6 @@ for i in range(num_logs):
         # Generate fake acct number
         app_log['Event Details']['Account Number'] = str(random.randint(100000000, 9999999999))
 
-        # Generate fake currency amount between two amounts
-        min_amount = 10000.50
-        max_amount = 999000.25
         current_balance = round(fake.random.uniform(min_amount, max_amount), 2)
         app_log['Event Details']['Current Balance'] = current_balance
 
