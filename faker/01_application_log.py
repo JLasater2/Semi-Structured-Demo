@@ -31,7 +31,7 @@ for i in range(num_logs):
     # For 30% of the records, use a specified user name 
     # else for the other 70% generate a random user name
     if random.random() < 0.3:
-        username = "JamesBond007"
+        username = "norman58"  #the bad guy
 
         # Define the choices for the event types and their corresponding probabilities
         event_type_choices = [
