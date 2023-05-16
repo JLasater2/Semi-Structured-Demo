@@ -23,7 +23,7 @@ while len(usernames) < 32:
         usernames.append(username)
 
 # Set the number of logs to generate
-num_logs = 10000
+num_logs = 20587 
 
 # Loop through the number of logs to generate
 for i in range(num_logs):
