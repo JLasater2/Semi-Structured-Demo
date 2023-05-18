@@ -10,14 +10,15 @@ fake = Faker()
 app_logs = []
 
 # Define the date range for the logs
-start_date = datetime.date(2023, 4, 1)
-end_date = datetime.date(2023, 4, 10)
+start_date = datetime.date(2023, 2, 1)
+end_date = datetime.date(2023, 5, 10)
 
 event_description = ''
 
 # Define a list of distinct usernames
 usernames = []
-while len(usernames) < 32:
+usernames.append("norman58") # add bad guy
+while len(usernames) < 45:
     username = fake.user_name()
     if username not in usernames:
         usernames.append(username)
@@ -30,8 +31,12 @@ for i in range(num_logs):
 
     # For 30% of the records, use a specified user name 
     # else for the other 70% generate a random user name
-    if random.random() < 0.3:
+    if random.random() < 0.2:
         username = "norman58"  #the bad guy
+
+        # Define the date range for the logs
+        start_date = datetime.date(2023, 5, 1)
+        end_date = datetime.date(2023, 5, 10)
 
         # Define the choices for the event types and their corresponding probabilities
         event_type_choices = [
@@ -46,6 +51,10 @@ for i in range(num_logs):
         max_amount = 999000.25
     else: 
         username = random.choice(usernames)
+
+        # Define the date range for the logs
+        start_date = datetime.date(2023, 2, 1)
+        end_date = datetime.date(2023, 5, 10)
 
         # Define the choices for the event types and their corresponding probabilities
         event_type_choices = [
