@@ -14,14 +14,3 @@ table = pa.Table.from_pydict({k.replace(' ', '_'): [d.get(k, None) for d in data
 with open('faker/output/application_log.parquet', 'wb') as f:
     pq.write_table(table, f)
 
-# Generate an XML document from the same data
-root = ET.Element('application_logs')
-for d in data:
-    log_elem = ET.SubElement(root, 'log')
-    for k, v in d.items():
-        field_elem = ET.SubElement(log_elem, k.replace(' ', '_'))
-        field_elem.text = str(v)
-
-# Write the XML document to a file
-tree = ET.ElementTree(root)
-tree.write('faker/output/application_log.xml', encoding='utf-8', xml_declaration=True)
