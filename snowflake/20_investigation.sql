@@ -13,6 +13,7 @@ with base as (
 select 
     count(1) as cnt
     , username
-    , date_trunc(week, eventdatetime)
+    , date_trunc(day, eventdatetime)
 from base
 group by 2, 3
+order by 1 desc
