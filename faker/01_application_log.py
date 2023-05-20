@@ -2,16 +2,13 @@ from faker import Faker
 import json
 import random
 import datetime
+import config
 
 # Instantiate the Faker object
 fake = Faker()
 
 # Create a list to store the application logs
 app_logs = []
-
-# Define the date range for the logs
-start_date = datetime.date(2023, 2, 1)
-end_date = datetime.date(2023, 5, 10)
 
 event_description = ''
 
@@ -53,8 +50,8 @@ for i in range(num_logs):
         username = random.choice(usernames)
 
         # Define the date range for the logs
-        start_date = datetime.date(2023, 2, 1)
-        end_date = datetime.date(2023, 5, 10)
+        start_date = config.start_date
+        end_date = config.end_date
 
         # Define the choices for the event types and their corresponding probabilities
         event_type_choices = [

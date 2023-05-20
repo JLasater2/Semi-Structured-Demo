@@ -7,7 +7,8 @@
 -- 1) see what the raw data looks like - json
 --    note - 1 json object per row since we used "strip_outer_array"
     select $1
-    from @s3_stage_json/import/application_log.json;
+    from @s3_stage_json/import/application_log.json
+    limit 10;
 
 
 -- 2) use lateral flatten() to view all of the unique paths in the json
