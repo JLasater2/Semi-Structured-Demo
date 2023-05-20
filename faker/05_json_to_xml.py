@@ -30,3 +30,5 @@ for item in json_data:
 # Write the XML document to a file
 tree = ET.ElementTree(root)
 tree.write('faker/output/application_log.xml', encoding='utf-8', xml_declaration=True)
+
+print("Done!")

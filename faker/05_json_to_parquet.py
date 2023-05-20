@@ -14,3 +14,4 @@ table = pa.Table.from_pydict({k.replace(' ', '_'): [d.get(k, None) for d in data
 with open('faker/output/application_log.parquet', 'wb') as f:
     pq.write_table(table, f)
 
+print("Done!")

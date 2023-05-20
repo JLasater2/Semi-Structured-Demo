@@ -19,13 +19,6 @@ fake = Faker()
 # Create a list to store the firewall logs
 security_event_logs = []
 
-# Set the number of logs to generate
-num_logs = 56087
-
-# Define the date range for the logs
-start_date =config.start_date
-end_date = config.end_date
-
 # Retrieve credentials
 with open('../Common/faker.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
@@ -49,23 +42,53 @@ cursor.execute('SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.loca
 rows = cursor.fetchall()
 
 # Loop through the number of logs to generate
-for i in range(num_logs):
-    # Generate a random date between the start and end dates
-    date = fake.date_between_dates(date_start=start_date, date_end=end_date)
-    
-    # Generate random IP addresses
-    source_ip = random.choice(rows)[0]
-    dest_ip = fake.ipv4()
+for i in range( config.security_event_log_num_logs ):
 
-    # Generate random port numbers
-    source_port = random.randint(1024, 65535)
-    dest_port = random.randint(1, 1023)
+    # For a subset of the records, use a specified user name 
+    # else generate a random user name
+    if random.random() < config.security_event_log_pct_compromised_activity:
 
-    # Generate random protocol
-    protocol = random.choice(['TCP', 'UDP'])
+          # Generate a random date between the start and end dates
+        date = fake.date_between_dates( date_start = config.compromised_start_date, date_end = config.compromised_end_date )
 
-    # Generate random action
-    action = random.choice(['Allowed', 'Blocked'])
+        # Generate random IP addresses
+        source_ip = random.choice(rows)[0]
+        dest_ip = fake.ipv4()
+
+        # Randomly select user name
+        username = config.compromised_user_name
+
+        # Generate random port numbers
+        source_port = random.randint(1024, 65535)
+        dest_port = random.randint(1, 1023)
+
+        # Generate random protocol
+        protocol = random.choice(['TCP', 'UDP'])
+
+        # Generate random action
+        action = random.choice(['Allowed', 'Blocked'])
+
+    else:
+
+        # Generate a random date between the start and end dates
+        date = fake.date_between_dates( date_start = config.start_date, date_end = config.end_date )
+        
+        # Generate random IP addresses
+        source_ip = random.choice(rows)[0]
+        dest_ip = fake.ipv4()
+
+        # Randomly select user name
+        username = random.choice( config.usernames )
+
+        # Generate random port numbers
+        source_port = random.randint(1024, 65535)
+        dest_port = random.randint(1, 1023)
+
+        # Generate random protocol
+        protocol = random.choice(['TCP', 'UDP'])
+
+        # Generate random action
+        action = random.choice(['Allowed', 'Blocked'])
 
     # Create a dictionary to represent the firewall log
     security_event_log = {
@@ -73,6 +96,7 @@ for i in range(num_logs):
         'Time': fake.time(),
         'Source IP': source_ip,
         'Destination IP': dest_ip,
+        'Username' : username,
         'Protocol': protocol,
         'Source Port': source_port,
         'Destination Port': dest_port,
@@ -86,3 +110,5 @@ for i in range(num_logs):
 # Write the list of firewall logs to a JSON file
 with open('faker/output/security_event_log.json', 'w') as file:
     json.dump(security_event_logs, file, indent=4)
+
+print("Done!")

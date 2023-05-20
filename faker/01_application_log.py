@@ -13,27 +13,22 @@ app_logs = []
 event_description = ''
 
 # Define a list of distinct usernames
-usernames = []
-usernames.append("norman58") # add bad guy
-while len(usernames) < 45:
-    username = fake.user_name()
-    if username not in usernames:
-        usernames.append(username)
+usernames = config.usernames
 
 # Set the number of logs to generate
-num_logs = 20587 
+num_logs = config.application_log_num_logs 
 
 # Loop through the number of logs to generate
 for i in range(num_logs):
 
-    # For 30% of the records, use a specified user name 
-    # else for the other 70% generate a random user name
-    if random.random() < 0.2:
-        username = "norman58"  #the bad guy
+    # For a subset of the records, use a specified user name 
+    # else generate a random user name
+    if random.random() < config.application_log_pct_compromised_activity:
+        username = config.compromised_user_name
 
         # Define the date range for the logs
-        start_date = datetime.date(2023, 5, 1)
-        end_date = datetime.date(2023, 5, 10)
+        start_date = config.compromised_start_date
+        end_date = config.compromised_end_date
 
         # Define the choices for the event types and their corresponding probabilities
         event_type_choices = [
@@ -133,3 +128,4 @@ for i in range(num_logs):
 with open('faker/output/application_log.json', 'w') as file:
     json.dump(app_logs, file, indent=4)
 
+print("Done!")
