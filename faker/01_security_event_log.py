@@ -11,6 +11,7 @@ import random
 import snowflake.connector
 import csv
 import datetime
+import config
 
 # Instantiate the Faker object
 fake = Faker()
@@ -19,12 +20,13 @@ fake = Faker()
 security_event_logs = []
 
 # Set the number of logs to generate
-num_logs = 10
+num_logs = 56087
 
 # Define the date range for the logs
-start_date = datetime.date(2023, 4, 1)
-end_date = datetime.date(2023, 4, 10)
+start_date =config.start_date
+end_date = config.end_date
 
+# Retrieve credentials
 with open('../Common/faker.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile)
     for row in csvreader:
@@ -74,8 +76,8 @@ for i in range(num_logs):
         'Protocol': protocol,
         'Source Port': source_port,
         'Destination Port': dest_port,
-        'Action': action,
-        'Rule': rule
+        'Action': action#,
+       # 'Rule': rule
     }
 
     # Append the firewall log dictionary to the list
