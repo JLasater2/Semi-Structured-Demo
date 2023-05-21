@@ -126,6 +126,6 @@ for i in range(num_logs):
 
 # Write the list of application logs to a JSON file
 with open('faker/output/application_log.json', 'w') as file:
-    json.dump(app_logs, file, indent=4)
+    json.dump(app_logs, file)
 
 print("Done!")
