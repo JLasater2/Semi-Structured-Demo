@@ -15,3 +15,21 @@ lateral flatten(var_data, recursive => true) y
 group by 1
 order by 1
 ;
+
+-- Create view to simplify further analysis
+ create or replace view v_security_event_log as 
+    select 
+        security_event_log.$1:"Action" :: varchar as Action
+        , security_event_log.$1:"Date" as Date
+        , security_event_log.$1:"Source IP" :: varchar as SourceIP
+        , security_event_log.$1:"Source Port" :: varchar as SourcePort
+        , security_event_log.$1:"Destination IP" :: varchar as DestinationIP
+        , security_event_log.$1:"Destination Port" :: varchar as DestinationPort
+        , security_event_log.$1:"Protocol" :: varchar as Protocol
+    from @s3_stage_json/import/security_event_log.json security_event_log
+;
+
+select * 
+from v_security_event_log
+limit 5
+;
