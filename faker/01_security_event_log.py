@@ -37,22 +37,25 @@ conn = snowflake.connector.connect(
 )
 
 # Execute a SQL query to retrieve the Source IP column from your Snowflake table
-cursor = conn.cursor()
-cursor.execute('SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location')
-rows = cursor.fetchall()
+US_IP_cursor = conn.cursor()
+US_IP_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country = 'US' and region = 'Colorado'")
+US_IPs = US_IP_cursor.fetchall()
+
+source_IP_compromised_cursor = conn.cursor()
+source_IP_compromised_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country not in('US', 'IN') ")
+non_US_IPs_compromised = source_IP_compromised_cursor.fetchall()
 
 # Loop through the number of logs to generate
 for i in range( config.security_event_log_num_logs ):
 
-    # For a subset of the records, use a specified user name 
-    # else generate a random user name
+    # Generate logs indicating an account was compromised
     if random.random() < config.security_event_log_pct_compromised_activity:
 
           # Generate a random date between the start and end dates
         date = fake.date_between_dates( date_start = config.compromised_start_date, date_end = config.compromised_end_date )
 
         # Generate random IP addresses
-        source_ip = random.choice(rows)[0]
+        source_ip = random.choice(non_US_IPs_compromised)[0]
         dest_ip = fake.ipv4()
 
         # Randomly select user name
@@ -74,7 +77,7 @@ for i in range( config.security_event_log_num_logs ):
         date = fake.date_between_dates( date_start = config.start_date, date_end = config.end_date )
         
         # Generate random IP addresses
-        source_ip = random.choice(rows)[0]
+        source_ip = random.choice(US_IPs)[0]
         dest_ip = fake.ipv4()
 
         # Randomly select user name
