@@ -20,7 +20,8 @@ order by 1
  create or replace view v_security_event_log as 
     select 
         security_event_log.$1:"Action" :: varchar as Action
-        , security_event_log.$1:"Date" as Date
+        , to_timestamp(security_event_log.$1:Date || ' ' || security_event_log.$1:Time) as Timestamp
+        , security_event_log.$1:"Username" as UserName
         , security_event_log.$1:"Source IP" :: varchar as SourceIP
         , security_event_log.$1:"Source Port" :: varchar as SourcePort
         , security_event_log.$1:"Destination IP" :: varchar as DestinationIP
