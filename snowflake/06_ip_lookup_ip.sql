@@ -14,4 +14,8 @@ create or replace function ip_to_int(ip_address varchar)
     )
   $$
   ;
-
+  
+select
+  *
+from ipinfo_free_ip_geolocation_sample.demo.location
+limit 10;

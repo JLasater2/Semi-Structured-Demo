@@ -53,26 +53,16 @@
     lateral flatten( x.$1:"Event Details", recursive => true ) y
     limit 100
 ;
--- -- 4) use is_object() to filter out the rows where the value contains other json rather than
--- --    a simple value.  Note there appears to be sensitive data such as account numbers
---     select 
---         y.*
---     from (
---         select $1 as var_data
---         from @s3_stage_json/import/application_log.json
---     )x ,
---     lateral flatten( var_data, recursive => true ) y
---     where 
---         is_object(y.value) = false  -- use this filter to ignore rows that are not flattened
---         and is_array(y.value) = false
---     ;
+
 /* Step 5: Create view 
    
-   Now that we have an idea of they keys, we can create a view at the grain of the original file.
-   This will make the data easier to work with for downstream consumers.
+   Now that we have an idea of they keys, we can create a view at the grain of the original file to 
+   make the data easier to work with for downstream consumers.
    Note the following:
-     1) The SEQ column indicates the row number in the original file that each row corresponds to.
-     2) A row is created for each key/value pair in the outermost object 
+     1) The view performs some light transformations such as casting and aliasing
+     2) Details from the nested object "Event Details" are also selected
+     3) The Recent Txns array is also included but is not transformed.  
+        This can be processed in a separate view.
 */
 create or replace view v_application_log as 
     select 
@@ -86,7 +76,7 @@ create or replace view v_application_log as
         , x.$1['Event Details']['Account Number'] :: varchar as AccountNumber
         , x.$1['Event Details']['Recent Txns'] as RecentTxns  -- This is still an array and can be flattened to denormalize the data
    from @s3_stage_json/import/application_log.json x
-    ;
+;
 
     create or replace masking policy account_mask
         as (value varchar, key varchar) returns varchar ->
@@ -102,6 +92,7 @@ create or replace view v_application_log as
     -- Test the view 
     select * 
     from v_application_log
+    where PhonePreviousValue is not null
     limit 10
 
 ;
