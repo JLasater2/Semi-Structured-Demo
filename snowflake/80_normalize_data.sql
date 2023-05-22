@@ -1,1 +1,0 @@
--- Question from recent event - how do I normalize semi-structured data?
