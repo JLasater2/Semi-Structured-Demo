@@ -49,3 +49,5 @@ for i in range(num_logs):
 # Write the list of firewall logs to a JSON file
 with open('faker/output/firewall_log.json', 'w') as file:
     json.dump(firewall_logs, file)
+
+print("Done!")

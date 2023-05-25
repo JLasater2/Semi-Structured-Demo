@@ -1,2 +1,3 @@
 faker/output/*
 faker/__pycache__/*
+faker/temp/*
