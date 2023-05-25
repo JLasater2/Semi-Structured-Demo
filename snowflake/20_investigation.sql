@@ -1,19 +1,49 @@
--- Analyze the application log to check for anomalies in the # of accounts accessed
--- View activity type by login
-with base as (
-    select 
-        var_data_unmasked:Username::varchar as UserName
-        , var_data_unmasked:"Event Type"::varchar as EventType
-        , cast(
-            var_data_unmasked:Date::varchar || ' ' ||
-              var_data_unmasked:Time::varchar 
-         as datetime) as EventDateTime
-    from v_application_log_raw
+select *
+from v_application_log
+limit 100
+;
+
+
+select * 
+from v_security_event_log;
+
+-- Combined 
+with 
+v_application_log_cte as (
+    select * from v_application_log
+    -- where username like '%norman%'
+    limit 10
 )
-select 
-    count(1) as cnt
-    , username
-    , date_trunc(day, eventdatetime)
-from base
-group by 2, 3
-order by 1 desc
+
+, v_security_event_log_cte as (
+    select * from v_security_event_log
+)
+
+, ip_location_cte as (
+    select * from ipinfo_free_ip_geolocation_sample.demo.location 
+)
+
+select
+      al.username, eventtype
+    , sel.sourceip
+    , ipl.city, ipl.region, ipl.country, ipl.lat, ipl.lng
+
+from v_application_log_cte al
+
+left outer join v_security_event_log_cte sel
+    on al.username = sel.username
+    and al.timestamp between sel.timestamp and sel.end_timestamp
+
+left outer join ip_location_cte ipl
+    on ip_to_int( sel.sourceip ) between ipl.start_ip_int and ipl.end_ip_int
+
+;
+
+
+select distinct username
+from v_security_event_log
+order by username;
+
+select distinct username 
+from v_application_log
+order by username ;
