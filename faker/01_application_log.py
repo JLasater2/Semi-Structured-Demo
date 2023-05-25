@@ -22,7 +22,7 @@ num_logs = config.application_log_num_logs
 for i in range(num_logs):
 
     # For a subset of the records, use a specified user name 
-    # else generate a random user name
+    # else use a random user name
     if random.random() < config.application_log_pct_compromised_activity:
         username = config.compromised_user_name
 
@@ -59,10 +59,6 @@ for i in range(num_logs):
         # Generate fake currency amount between two amounts
         min_amount = 10000.50
         max_amount = 999000.25
-
-    # Generate a random IP address
-    ip_address = fake.ipv4()
-
 
     # Create a weighted list of event types
     event_types = [c[0] for c in event_type_choices for i in range(int(c[1]*10))]
