@@ -1,18 +1,8 @@
-select *
-from v_application_log
-limit 100
-;
-
-
-select * 
-from v_security_event_log;
 
 -- Combined 
 with 
 v_application_log_cte as (
     select * from v_application_log
-    -- where username like '%norman%'
-    limit 10
 )
 
 , v_security_event_log_cte as (
@@ -20,30 +10,43 @@ v_application_log_cte as (
 )
 
 , ip_location_cte as (
-    select * from ipinfo_free_ip_geolocation_sample.demo.location 
+    select 
+        *
+    from ipinfo_free_ip_geolocation_sample.demo.location 
 )
 
-select
-      al.username, eventtype
-    , sel.sourceip
-    , ipl.city, ipl.region, ipl.country, ipl.lat, ipl.lng
+, joined_cte as (
+    select
+        al.username, al.eventtype
+        , sel.sourceip
+        , ipl.postal, ipl.city, ipl.region, ipl.country, ipl.lat, ipl.lng
 
-from v_application_log_cte al
+    -- get user name and application activity type
+    from v_application_log_cte al 
 
-left outer join v_security_event_log_cte sel
-    on al.username = sel.username
-    and al.timestamp between sel.timestamp and sel.end_timestamp
+    -- get IP address
+    left outer join v_security_event_log_cte sel  
+        on al.username = sel.username
+        and al.timestamp between sel.timestamp and sel.end_timestamp
 
-left outer join ip_location_cte ipl
-    on ip_to_int( sel.sourceip ) between ipl.start_ip_int and ipl.end_ip_int
+    -- get IP city, state, lat, and long coordinates
+    left outer join ip_location_cte ipl  
+        on parse_ip_demo( sel.sourceip ) between ipl.start_ip_int and ipl.end_ip_int
+)
 
+select *
+from joined_cte
 ;
 
-
-select distinct username
+select ip_to_int(sourceip )
 from v_security_event_log
-order by username;
+order by sourceip
+-- limit 10;
+;
 
-select distinct username 
-from v_application_log
-order by username ;
+desc table ipinfo_free_ip_geolocation_sample.demo.location;
+
+  select 
+        *
+        , cast(start_ip_int as varchar) as start_ip_int2
+    from ipinfo_free_ip_geolocation_sample.demo.location ;
