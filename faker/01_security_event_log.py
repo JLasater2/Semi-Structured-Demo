@@ -38,11 +38,11 @@ conn = snowflake.connector.connect(
 
 # Execute a SQL query to retrieve the Source IP column from your Snowflake table
 US_IP_cursor = conn.cursor()
-US_IP_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country = 'US' and region = 'Colorado'")
+US_IP_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country = 'US' and region = 'Colorado' and contains(start_ip, '.')")
 US_IPs = US_IP_cursor.fetchall()
 
 source_IP_compromised_cursor = conn.cursor()
-source_IP_compromised_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country not in('US', 'IN') ")
+source_IP_compromised_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country not in('US', 'IN') and contains(start_ip, '.')")
 non_US_IPs_compromised = source_IP_compromised_cursor.fetchall()
 
 # Loop through the number of logs to generate
