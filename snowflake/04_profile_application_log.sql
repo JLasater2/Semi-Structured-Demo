@@ -91,8 +91,8 @@ create or replace view v_application_log as
 
     -- Test the view 
     select * 
-    from v_application_log
+    from application_log
     where PhonePreviousValue is not null
-    limit 10
+    --limit 10
 
 ;

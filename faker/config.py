@@ -15,7 +15,7 @@ application_log_pct_compromised_activity = 0.2
 security_event_log_pct_compromised_activity = 0.2
 
 # Import usernames from the file if the file already exists
-# This is needed so that usernames do not change for each py file execution 
+# This is needed so that usernames are consistent across executions
 filename = "faker/temp/usernames.txt"
 if os.path.isfile(filename):
     with open(filename, "r") as file:
