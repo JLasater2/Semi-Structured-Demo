@@ -37,13 +37,13 @@ conn = snowflake.connector.connect(
 )
 
 # Execute a SQL query to retrieve the Source IP column from your Snowflake table
-US_IP_cursor = conn.cursor()
-US_IP_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country = 'US' and region = 'Colorado' and contains(start_ip, '.')")
-US_IPs = US_IP_cursor.fetchall()
+us_ip_cursor = conn.cursor()
+us_ip_cursor.execute("select start_ip from ipinfo_free_ip_geolocation_sample.demo.location where country = 'US' and region = 'Colorado' and contains(start_ip, '.')")
+us_ips = us_ip_cursor.fetchall()
 
-source_IP_compromised_cursor = conn.cursor()
-source_IP_compromised_cursor.execute("SELECT start_ip FROM ipinfo_free_ip_geolocation_sample.demo.location WHERE country not in('US', 'IN') and contains(start_ip, '.')")
-non_US_IPs_compromised = source_IP_compromised_cursor.fetchall()
+source_ip_compromised_cursor = conn.cursor()
+source_ip_compromised_cursor.execute("select start_ip from ipinfo_free_ip_geolocation_sample.demo.location where region = 'Wisconsin' and contains(start_ip, '.')")
+non_us_ips_compromised = source_ip_compromised_cursor.fetchall()
 
 # Loop through the number of logs to generate
 for i in range( config.security_event_log_num_logs ):
@@ -55,7 +55,7 @@ for i in range( config.security_event_log_num_logs ):
         date = fake.date_between_dates( date_start = config.compromised_start_date, date_end = config.compromised_end_date )
 
         # Generate random IP addresses
-        source_ip = random.choice(non_US_IPs_compromised)[0]
+        source_ip = random.choice(non_us_ips_compromised)[0]
         dest_ip = fake.ipv4()
 
         # Randomly select user name
@@ -77,7 +77,7 @@ for i in range( config.security_event_log_num_logs ):
         date = fake.date_between_dates( date_start = config.start_date, date_end = config.end_date )
         
         # Generate random IP addresses
-        source_ip = random.choice(US_IPs)[0]
+        source_ip = random.choice(us_ips)[0]
         dest_ip = fake.ipv4()
 
         # Randomly select user name

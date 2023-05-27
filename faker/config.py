@@ -11,8 +11,8 @@ compromised_start_date = datetime.date(2023, 5, 24)
 compromised_end_date = datetime.date(2023, 6, 1)
 
 # pct of records for compromised activity
-application_log_pct_compromised_activity = 0.2
-security_event_log_pct_compromised_activity = 0.2
+application_log_pct_compromised_activity = 0.05
+security_event_log_pct_compromised_activity = 0.05
 
 # Import usernames from the file if the file already exists
 # This is needed so that usernames are consistent across executions

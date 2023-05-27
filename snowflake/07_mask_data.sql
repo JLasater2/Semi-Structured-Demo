@@ -18,21 +18,21 @@ use schema semi_structured_demo.stg;
 -- ;
 
 --   We can do this without defining a structure for the JSON
--- create or replace masking policy variant_test_mask
--- as (val variant) returns variant ->
--- case
---    when is_role_in_session('sensitive_read_only') then val
---    else object_insert(val, 'Account Number', '***', true):: variant  -- Case sensitive?
--- end
--- ;
+-- -- create or replace masking policy variant_test_mask
+-- -- as (val variant) returns variant ->
+-- -- case
+-- --    when is_role_in_session('sensitive_read_only') then val
+-- --    else object_insert(val, 'Account Number', '***', true):: variant  -- Case sensitive?
+-- -- end
+-- -- ;
 
--- create or replace view v_application_log_raw as 
---     select $1 as var_data, $1 as var_data_unmasked
---     from @s3_stage_json/import/application_log.json
-;
---  alter view v_application_log_raw modify column var_data 
---  set masking policy variant_test_mask ;
-
--- select var_data_unmasked, var_data_unmasked:"Account Number"
--- from v_application_log_raw
+-- -- create or replace view v_application_log_raw as 
+-- --     select $1 as var_data, $1 as var_data_unmasked
+-- --     from @s3_stage_json/import/application_log.json
 -- ;
+-- --  alter view v_application_log_raw modify column var_data 
+-- --  set masking policy variant_test_mask ;
+
+-- -- select var_data_unmasked, var_data_unmasked:"Account Number"
+-- -- from v_application_log_raw
+-- -- ;
