@@ -1,6 +1,7 @@
 import datetime
 from faker import Faker
 import os
+import random
 
 # Instantiate the Faker object
 fake = Faker()
@@ -11,32 +12,52 @@ compromised_start_date = datetime.date(2023, 5, 24)
 compromised_end_date = datetime.date(2023, 6, 1)
 
 # pct of records for compromised activity
-application_log_pct_compromised_activity = 0.05
-security_event_log_pct_compromised_activity = 0.05
+application_log_pct_compromised_activity = 0.01
+security_event_log_pct_compromised_activity = 0.01
 
-# Import usernames from the file if the file already exists
-# This is needed so that usernames are consistent across executions
 filename = "faker/temp/usernames.txt"
-if os.path.isfile(filename):
-    with open(filename, "r") as file:
-        usernames = file.read().splitlines()
-    print('Importing usernames from ' + filename)
 
-else:# Define a list of distinct usernames
-    usernames = []
-    usernames.append(compromised_user_name) # add bad guy
+usernames = []
+weights = []
+
+# if os.path.isfile(filename):
+if os.path.isfile(filename):
+    # Read usernames and weights from the file
+  with open(filename, "r") as file:
+    for line in file:
+        username, weight = line.strip().split(",")
+        usernames.append(username)
+        weights.append(float(weight))
+    
+    print('Imported usernames and weights from ' + filename)
+
+else:
+    # Add compromised name and weight 
+    usernames.append(compromised_user_name) 
+    weights.append(random.random())
+
+    # Add random usernames and weights
     while len(usernames) < 45:
         username = fake.user_name()
         if username not in usernames:
             usernames.append(username)
+            weights.append(random.random())
 
-    # Save usernames to a file
-    filename = 'faker/temp/usernames.txt'
-    with open(filename, "w") as file:
-        for username in usernames:
-            file.write(username + "\n")
+    total_weight = sum(weights)
 
-    print("Usernames saved to:", filename)
+    # Normalize weights to sum up to 1
+    normalized_weights = [w / total_weight for w in weights]
+
+    # Create a list of tuples with usernames and weights
+    data = list(zip(usernames, normalized_weights))
+
+    # Write usernames and weights to the file
+    with open(filename, 'w') as file:
+        for item in data:
+            file.write(f"{item[0]},{item[1]}\n")
+
+    print("Usernames and weights saved to:", filename)
+    
 
 # total record count
 application_log_num_logs = 20587

@@ -18,7 +18,7 @@ create or replace view v_combined_log as
 
     , joined_cte as (
         select
-            al.username, al.eventtype
+            al.username, al.eventtype, al.timestamp
             , sel.sourceip
             , ipl.postal, ipl.city, ipl.region, ipl.country, ipl.lat, ipl.lng, ipl.geo_point
 

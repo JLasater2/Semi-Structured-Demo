@@ -14,6 +14,7 @@ event_description = ''
 
 # Define a list of distinct usernames
 usernames = config.usernames
+weights = config.weights
 
 # Set the number of logs to generate
 num_logs = config.application_log_num_logs 
@@ -42,7 +43,7 @@ for i in range(num_logs):
         min_amount = 100000.50
         max_amount = 999000.25
     else: 
-        username = random.choice(usernames)
+        username = random.choices(usernames, weights)[0]
 
         # Define the date range for the logs
         start_date = config.start_date

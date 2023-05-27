@@ -4,11 +4,9 @@
 select 
     username
     , eventtype
-    , date_trunc(day, app_log_timestamp) as activity_dt
+    , date_trunc(day, timestamp) as activity_dt
     , count(*) as event_cnt
-    , distan
-from v_combined_logs
--- where username like '%norman%'
+from combined_log
 group by 1, 2, 3
 order by username
 ;
