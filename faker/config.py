@@ -34,7 +34,7 @@ if os.path.isfile(filename):
 else:
     # Add compromised name and weight 
     usernames.append(compromised_user_name) 
-    weights.append(random.random())
+    weights.append(0.3)
 
     # Add random usernames and weights
     while len(usernames) < 45:
