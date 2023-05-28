@@ -75,4 +75,4 @@ select
     , x.$1['Event Details']['Account Number'] :: varchar as AccountNumber
     , x.$1['Event Details']['Recent Txns'] as RecentTxns  -- This is still an array and can be flattened to denormalize the data
 from @s3_stage_json/import/application_log.json x
-
+limit 100;

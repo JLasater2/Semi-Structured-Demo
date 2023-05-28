@@ -30,6 +30,7 @@ SELECT $1
 FROM @s3_stage_json/import/application_log.xml
 (FILE_FORMAT => ff_xml)
 -- where $1:"Event Details"."Account Number" = '1252796893'
+limit 100
 ;
 
 -- Try out infer schema - works for parquet, avro, ORC
