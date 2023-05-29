@@ -13,9 +13,10 @@ create or replace file format ff_xml
 ;
 
 -- parquet
-SELECT $1, $1:"Event_Details"."Current Balance"::numeric(15,2)
+SELECT $1
 FROM @s3_stage_unformatted/import/application_log.parquet
 (FILE_FORMAT => ff_parquet)
+limit 100
 -- where $1:"Event_Details"."Customer ID" = 'TX-674354928' 
 ;
 
@@ -33,12 +34,23 @@ FROM @s3_stage_json/import/application_log.xml
 limit 100
 ;
 
--- Try out infer schema - works for parquet, avro, ORC
--- Query the INFER_SCHEMA function.
-SELECT *
-  FROM TABLE(
-    INFER_SCHEMA(
-      LOCATION=>'@s3_stage_json/import'
-      , FILE_FORMAT=>'ff_parquet'
-      )
-    );
+-- Demonstrate infer schema capability for parquet, avro, and orc
+-- Create the table 
+create or replace external table application_log_parquet
+    using template (
+        select array_agg(object_construct(*))
+          from table(
+            infer_schema(
+              location=>'@s3_stage_json/import'
+              , file_format=>'ff_parquet'
+            )
+        )     
+    )
+    location = @s3_stage_json/import
+    file_format = ff_parquet
+;
+
+-- View the data
+select *
+from application_log_parquet
+limit 100;
