@@ -31,6 +31,4 @@ create or replace view v_application_log as
         end
     ;
 
-    -- alter view v_application_log modify column value 
-    --     set masking policy account_mask using (value, key);
-
+   

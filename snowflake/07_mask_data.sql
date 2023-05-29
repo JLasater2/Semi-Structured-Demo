@@ -44,7 +44,7 @@ alter view v_application_log_raw
 -- Make sure sensitive role is not being used
 use secondary roles none;
 
--- 
+-- View the masked data
 select 
     var_data
     , var_data:"Event Details"."Account Number"
@@ -52,8 +52,11 @@ from v_application_log_raw
 limit 100
 ;
 
+-- The role sensitive_read_only was granted to the user earlier
+-- Activate the role in the session
 use secondary roles all;
 
+-- View the unmasked data
 select 
     var_data
     , var_data:"Event Details"."Account Number"
