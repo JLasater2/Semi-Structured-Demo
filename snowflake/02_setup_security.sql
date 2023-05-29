@@ -8,6 +8,7 @@ grant role faker_read_only to user faker;
 grant role faker_read_only to user johnlasater2;
 grant role faker_read_only to role sysadmin;
 create or replace role sensitive_read_only;
+grant role sensitive_read_only to user johnlasater2;
 use role accountadmin;
 grant imported privileges on database ipinfo_free_ip_geolocation_sample to role faker_read_only;
 grant imported privileges on database ipinfo_free_ip_geolocation_sample to role semi_structured_demo;
