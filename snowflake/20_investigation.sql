@@ -1,3 +1,6 @@
+select * from combined_log
+limit 100;
+
 
 
 with combined_log_cte as (
@@ -34,3 +37,11 @@ order by username, timestamp
 
 -- Ideas for checking for anomalies:
 -- Distance from mean location, distance from previous login, time of day, volume of activity , type of activity
+
+
+
+
+COPY INTO @~
+FROM crm.customer
+FILE_FORMAT = (TYPE=CSV)
+-- SINGLE = true;
