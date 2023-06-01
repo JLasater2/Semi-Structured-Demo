@@ -51,6 +51,9 @@ create or replace external table application_log_parquet
 ;
 
 -- View the data
-select *
+select 
+  *
+  , "Event_Details":"Account Number"
+  , object_insert("Event_Details", 'Account Number', '***', true)
 from application_log_parquet
 limit 100;

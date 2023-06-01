@@ -13,7 +13,7 @@
  */
     select $1
     from @s3_stage_json/import/application_log.json
-    limit 10;
+    limit 100;
 
 /*  Step 2: View distinct keys
 
@@ -38,28 +38,51 @@
     order by 2
     ;
 
-/* Step 4: View flattened data
+/* Step 3: View flattened data
    
    Now that we have an idea of they keys, we'll remove the group by to view the values.
    Note the following:
      1) The SEQ column indicates the row number in the original file that each row corresponds to.
      2) A row is created for each key/value pair in the outermost object 
+     3) The Event Details object is not flattened; only the "top level" of the JSON was flattened.
 */
     select 
         y.*
         , is_object(y.value) as is_object
         , is_array(y.value) as is_array
     from  @s3_stage_json/import/application_log.json x ,
-    lateral flatten( x.$1:"Event Details", recursive => true ) y
+    lateral flatten( x.$1 ) y
     limit 100
 ;
 
-/* Step 5: Additional transformations
+/* Step 4: View recursively flattened data 
    
-   Now that we have an idea of they keys, we can create a view at the grain of the original file to 
-   make the data easier to work with for downstream consumers.
+   We'll modify the lateral flatten to add RECURSIVE => TRUE.  This will flatten (i.e. turn all objects and arrays into rows).
    Note the following:
-     1) The view performs some light transformations such as casting and aliasing
+     1) Items within the Event Details object and Recent Txns array now have their own individual rows in the result set.  
+        If we would like, we can exclude these "redundant" rows by adding a where clause of 'where not is_object() and not is_array().    
+*/
+    select 
+        y.*
+        , is_object(y.value) as is_object
+        , is_array(y.value) as is_array
+    from  @s3_stage_json/import/application_log.json x ,
+    lateral flatten( x.$1, recursive => true ) y
+    limit 100
+;
+
+/* Step 5: Deciding on the grain / additional transformations
+
+    In the previous query, we saw what the data looks like when it's fully flattened into rows.
+    Depending on the use case, that may or may not be ideal.  Another alternative would be to 
+    parse the JSON into columns instead of rows.  
+
+    It's also possible that you may choose to take one JSON file and have multiple queries that 
+    parse the file into different grains - for example in this data the Recent Txns array could 
+    be consumed as a separate view or table.
+
+   Note the following:
+     1) The query performs some light transformations such as casting and aliasing
      2) Details from the nested object "Event Details" are also selected
      3) The Recent Txns array is also included but is not transformed.  
         This can be processed in a separate view.

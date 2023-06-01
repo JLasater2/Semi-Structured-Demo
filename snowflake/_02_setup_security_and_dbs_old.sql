@@ -13,8 +13,6 @@ grant role sensitive_read_only to user johnlasater2;
 use role accountadmin;
 grant imported privileges on database ipinfo_free_ip_geolocation_sample to role faker_read_only;
 grant imported privileges on database ipinfo_free_ip_geolocation_sample to role semi_structured_demo;
-use role sysadmin;
-grant usage on warehouse compute_wh to role faker_read_only; 
 -----------------------------------------------------
 -- Role to be used for demo 
 -----------------------------------------------------

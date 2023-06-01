@@ -30,3 +30,7 @@
         , Protocol
     from base
 ;
+
+
+select * from v_security_event_log
+limit 100;

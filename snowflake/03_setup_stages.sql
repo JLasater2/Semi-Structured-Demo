@@ -20,6 +20,7 @@ create or replace stage semi_structured_demo.stg.s3_stage_xml
     ;
 
 -- show stage properties
-desc stage stg.s3_stage_json;
+-- desc stage stg.s3_stage_json;
+
 -- list files available in the stage
 list @s3_stage_json/import/;

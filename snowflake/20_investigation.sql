@@ -27,14 +27,10 @@ with combined_log_cte as (
 select 
     *
 from calc_distance_cte
-where distance_from_prev_activity_km > 100
+
+-- where distance_from_prev_activity_km > 100
 order by username, timestamp
 ;
 
 -- Ideas for checking for anomalies:
 -- Distance from mean location, distance from previous login, time of day, volume of activity , type of activity
-
-select * 
-from combined_log
-where country <> 'US'
-LIMIT 100;
