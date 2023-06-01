@@ -3,7 +3,7 @@
 -----------------------------------------------------
 use role useradmin;
 create or replace user faker;  --Password configured separately.
-create or replace user norman58;  -- For Snowflake account usage demo.  Password configured separately.
+--create or replace user norman58;  -- For Snowflake account usage demo.  Password configured separately.
 -----------------------------------------------------
 -- Create roles
 -----------------------------------------------------

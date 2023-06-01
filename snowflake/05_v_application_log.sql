@@ -23,12 +23,5 @@ create or replace view v_application_log as
    from @s3_stage_json/import/application_log.json x
 ;
 
-    create or replace masking policy account_mask
-        as (value varchar, key varchar) returns varchar ->
-        case
-            when is_role_in_session('sensitive_read_only') then value
-            else iff(key in ('Account Number', 'Customer ID'), '***', value)
-        end
-    ;
 
    

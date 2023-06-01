@@ -95,7 +95,7 @@ for i in range( config.security_event_log_num_logs ):
 
     # Create a dictionary to represent the firewall log
     security_event_log = {
-        'Date': date.strftime('%Y-%m-%d'),
+        'Log Date': date.strftime('%Y-%m-%d'),
         'Time': fake.time(),
         'Source IP': source_ip,
         'Destination IP': dest_ip,

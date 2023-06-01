@@ -1,6 +1,7 @@
--- Have to drop 
+-- Have to drop to allow masking policy to be dropped and recreated
 drop view if exists v_application_log_raw
 ;
+
 
 -- Create masking policy to demonstrate dynamic data masking
 create or replace masking policy variant_test_mask as (val variant) returns variant ->
